@@ -1,0 +1,7 @@
+.op { height:20px;padding:5px 0; white-space:nowrap;width:100%;line-height:0;line-height:0;}
+.optarget { background:url(../images/cz03.png) 0 -33px; width:20px; height:20px; display:inline-block; margin:0 5px;}
+.optarget b {display:none}
+.optarget b a {display:block;margin-bottom:5px;}
+
+.optarget b{ position: absolute; width: 75px;min-height:24px;padding:5px 5px 0; background:#eaeaea;margin:-2px 0 0 -75px; line-height:1.5; font-weight:400;border-radius:4px;z-index:99;display:none;}
+.optarget:hover b{display:inline-block;}

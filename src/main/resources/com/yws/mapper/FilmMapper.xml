@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.yws.mapper.FilmMapper">
+
+	<resultMap type="Film" id="filmRM">
+		<id property="id" column="film_id" />
+		<result property="title" column="title"/>
+		<result property="description" column="description"/>
+		<association property="language" javaType="Language">
+			<id property="id" column="language_id" />
+			<result property="name" column="name"/>
+			<result property="lastUpdate" column="last_update"/>
+		</association>
+	</resultMap>
+	
+	<insert id="insert" parameterType="Film" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO film
+			(film_id, title, description, language_id)
+		VALUES
+		(
+			#{id},
+			#{title},
+			#{description},
+			#{language.id}
+		)
+	</insert>
+	
+	
+	<select id="findPage" parameterType="com.yws.pagination.Page" resultMap="filmRM">
+		SELECT 
+			f.film_id,f.title,f.description,
+			l.language_id,l.name,l.last_update
+		FROM film f
+		LEFT JOIN language l ON f.language_id=l.language_id 
+		WHERE 1=1
+		<if test="entity.title != null"> AND f.title like concat('%', #{entity.title}, '%')</if>
+		ORDER BY f.film_id
+		limit #{first},#{pageSize}
+		
+	</select>
+	
+	<select id="getTotalPage" parameterType="com.yws.pagination.Page" resultType="int">
+		SELECT COUNT(*)
+		FROM film f
+		LEFT JOIN language l ON f.language_id=l.language_id 
+		WHERE 1=1
+		<if test="entity.title != null"> AND f.title like concat('%', #{entity.title}, '%')</if>
+		ORDER BY f.film_id
+	</select>
+	
+	<delete id="deleteById" parameterType="int">
+		DELETE FROM film
+		WHERE film_id=#{id}
+	</delete>
+	
+	<update id="update" parameterType="Film">
+		UPDATE film
+		<set>
+			<if test="title != null"> title=#{title},</if>
+			<if test="language != null">language_id=#{language.id},</if>
+			<if test="description != null">description=#{description},</if>
+		</set>
+		WHERE film_id=#{id}
+	</update>
+	
+	<update id="setForignKeyChech" parameterType="int">
+	 SET FOREIGN_KEY_CHECKS = #{id}
+	</update>
+	
+</mapper>
